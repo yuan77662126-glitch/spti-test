@@ -1,0 +1,6 @@
+generator.html
+references/
+images/
+.DS_Store
+*.log
+node_modules/

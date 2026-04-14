@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SPTI · 运动英雄十五式</title>
+<style>
+:root {
+  --gold: #E5B04B;
+  --gold-light: #F5D380;
+  --gold-dark: #A67B1E;
+  --red: #C0392B;
+  --red-dark: #8B2817;
+  --bg: #0F0F14;
+  --bg-card: #1A1A22;
+  --bg-elev: #242430;
+  --text: #F5F5F0;
+  --text-dim: #9A9A8E;
+  --border: #3A3A48;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  font-size: 15px;
+}
+.container {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+}
+.hidden { display: none !important; }
+
+/* ========= 首页 ========= */
+.hero {
+  text-align: center;
+  padding: 40px 20px 30px;
+}
+.hero-logo {
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.hero-title {
+  font-size: 32px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--red));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+}
+.hero-sub {
+  color: var(--text-dim);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+.hero-desc {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+  line-height: 1.8;
+}
+.hero-desc strong { color: var(--gold); }
+.hero-stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 24px 0;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.stat-item { text-align: center; }
+.stat-num { font-size: 24px; font-weight: 700; color: var(--gold); }
+.stat-label { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--gold), var(--red));
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 2px;
+  box-shadow: 0 4px 20px rgba(229, 176, 75, 0.3);
+  transition: transform 0.15s;
+}
+.btn-primary:active { transform: scale(0.98); }
+.hero-footer { text-align: center; color: var(--text-dim); font-size: 11px; margin-top: 20px; }
+
+/* ========= 答题 ========= */
+.progress {
+  position: sticky; top: 0;
+  background: var(--bg);
+  padding: 16px 0 12px;
+  z-index: 10;
+}
+.progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--red));
+  transition: width 0.3s;
+}
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.question-card {
+  margin-top: 16px;
+  padding: 24px 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.q-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(229, 176, 75, 0.15);
+  color: var(--gold);
+  border-radius: 20px;
+  font-size: 11px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.q-text {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option {
+  padding: 14px 16px;
+  background: var(--bg-elev);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text);
+  transition: all 0.2s;
+  text-align: left;
+  line-height: 1.5;
+}
+.option:hover { border-color: var(--gold-dark); }
+.option.selected {
+  border-color: var(--gold);
+  background: rgba(229, 176, 75, 0.1);
+  color: var(--gold-light);
+}
+
+/* ========= 结果页 ========= */
+.result-card {
+  background: linear-gradient(180deg, #241A0F 0%, var(--bg-card) 40%);
+  border: 1.5px solid var(--gold-dark);
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(229, 176, 75, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+.hero-name {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--gold);
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+.hero-subname {
+  font-size: 15px;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-bottom: 20px;
+}
+.hero-emoji {
+  font-size: 72px;
+  margin: 10px 0 18px;
+  filter: drop-shadow(0 4px 20px rgba(229, 176, 75, 0.3));
+}
+.hero-quote {
+  padding: 14px;
+  background: rgba(229, 176, 75, 0.08);
+  border-left: 3px solid var(--gold);
+  border-radius: 6px;
+  color: var(--gold-light);
+  font-size: 14px;
+  margin: 16px 0;
+  text-align: left;
+  font-style: italic;
+}
+
+.section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.section-title {
+  font-size: 13px;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-title::before {
+  content: ''; width: 3px; height: 14px;
+  background: linear-gradient(180deg, var(--gold), var(--red));
+  border-radius: 2px;
+}
+.section-body {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.8;
+}
+.section-body p { margin-bottom: 10px; }
+.section-body strong { color: var(--gold-light); }
+
+#radarCanvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+.dim-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+.dim-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--bg-elev);
+  border-radius: 6px;
+  font-size: 12px;
+}
+.dim-item .dim-val {
+  color: var(--gold);
+  font-weight: 700;
+  font-family: monospace;
+}
+.build-list li {
+  padding-left: 24px;
+  position: relative;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.build-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  color: var(--gold);
+  font-weight: 700;
+}
+.next-tier {
+  background: linear-gradient(135deg, rgba(229, 176, 75, 0.15), rgba(192, 57, 43, 0.1));
+  border: 1px dashed var(--gold);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 10px;
+  text-align: center;
+}
+.next-tier .nt-label { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; letter-spacing: 1px; }
+.next-tier .nt-name { font-size: 16px; color: var(--gold); font-weight: 700; margin-bottom: 4px; }
+.next-tier .nt-gap { font-size: 12px; color: var(--text-dim); }
+
+.actions { display: flex; gap: 10px; margin-top: 20px; }
+.btn-secondary {
+  flex: 1;
+  padding: 14px;
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-secondary:active { background: var(--bg-card); }
+
+.disclaimer {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin: 30px 0 0;
+  padding: 16px;
+  line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- ============ 首页 ============ -->
+<div id="intro">
+  <div class="hero">
+    <div class="hero-logo">S · P · T · I</div>
+    <div class="hero-title">运动英雄十五式</div>
+    <div class="hero-sub">Sport Personality Type Indicator</div>
+  </div>
+
+  <div class="hero-desc">
+    每个人的运动能力都像一个游戏角色——<strong>VO2max 天花板、有氧基础、爆发力、肌肉耐力、恢复力</strong>，五个技能槽点出的不同组合，就是你独一无二的英雄定位。
+    <br><br>
+    20 道题，5 分钟，找到你的<strong>运动英雄</strong>和当前<strong>段位</strong>。
+    <br><br>
+    <strong>灵感来自 MBTI / SBTI，为运动人格而设计。</strong>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">15</div><div class="stat-label">运动英雄</div></div>
+    <div class="stat-item"><div class="stat-num">5</div><div class="stat-label">段位等级</div></div>
+    <div class="stat-item"><div class="stat-num">20</div><div class="stat-label">题测评</div></div>
+  </div>
+
+  <button class="btn-primary" onclick="startQuiz()">开始测试 →</button>
+
+  <div class="hero-footer">* 本测试仅供娱乐，不构成医学建议</div>
+</div>
+
+<!-- ============ 答题页 ============ -->
+<div id="quiz" class="hidden">
+  <div class="progress">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text">
+      <span id="progressText">1 / 20</span>
+      <span id="progressSection">能力题</span>
+    </div>
+  </div>
+  <div id="questionArea"></div>
+</div>
+
+<!-- ============ 结果页 ============ -->
+<div id="result" class="hidden">
+  <div class="result-card">
+    <div class="tier-badge" id="tierBadge">🥉 青铜</div>
+    <div class="hero-emoji" id="heroEmoji">🎭</div>
+    <div class="hero-name" id="heroName">诸葛亮</div>
+    <div class="hero-subname" id="heroSubname">初出茅庐</div>
+    <div class="hero-quote" id="heroQuote">"我再研究一下训练计划……算了，直接开始吧。"</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">五维能力面板</div>
+    <canvas id="radarCanvas" width="320" height="320"></canvas>
+    <div class="dim-list" id="dimList"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">你是谁</div>
+    <div class="section-body" id="heroDescription"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">你的状态</div>
+    <div class="section-body"><ul class="build-list" id="heroStatus"></ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Build 建议</div>
+    <div class="section-body"><ul class="build-list" id="heroBuild"></ul></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">下一段位</div>
+    <div class="next-tier">
+      <div class="nt-label">NEXT TIER</div>
+      <div class="nt-name" id="nextTierName">白银诸葛亮</div>
+      <div class="nt-gap" id="nextTierGap">距离下一段位还差 5 分</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-secondary" onclick="location.reload()">重新测试</button>
+    <button class="btn-secondary" onclick="shareResult()">分享结果</button>
+  </div>
+
+  <div class="disclaimer">
+    灵感来自 MBTI / SBTI<br>
+    本测试参考了 IPAQ、Jackson PA-R、ACSM、TQR 等问卷的题项设计<br>
+    仅供娱乐与自我认知，不构成医学或运动医学建议
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ============================================================
+   数据层:20 道题
+   ============================================================ */
+const QUESTIONS = [
+  // ============ 能力题 Q1-Q10 ============
+  { id:'Q1', section:'能力题 · VO2max', dim:'vo2max', text:'下面哪一条最能描述你最近 3 个月的运动习惯？',
+    options:[
+      {t:'几乎不运动，久坐为主', v:0},
+      {t:'偶尔散步、做家务等轻度活动', v:25},
+      {t:'每周 1-2 次，每次 10-30 分钟中等强度（快走 / 慢跑等）', v:50},
+      {t:'每周 3-5 次，每次 30 分钟以上中等或以上强度', v:75},
+      {t:'每周 5 次以上，持续训练 3 个月以上', v:90},
+      {t:'接近专业 / 竞技水平训练', v:100},
+    ] },
+  { id:'Q2', section:'能力题 · VO2max', dim:'vo2max', text:'爬 4 层楼不停，到顶层时你的状态：',
+    options:[
+      {t:'没感觉，可以继续往上', v:100},
+      {t:'呼吸稍快，能正常说话', v:75},
+      {t:'明显气喘但能坚持', v:50},
+      {t:'必须停下喘气，中途就要休息', v:25},
+      {t:'爬不到 4 层', v:0},
+    ] },
+
+  { id:'Q3', section:'能力题 · 有氧基础', dim:'aerobic', text:'最近 7 天，你快走或慢跑（能感到呼吸明显加快）累计多长时间？',
+    options:[
+      {t:'超过 150 分钟', v:100},
+      {t:'60-150 分钟', v:75},
+      {t:'30-60 分钟', v:50},
+      {t:'1-30 分钟', v:25},
+      {t:'几乎没有', v:0},
+    ] },
+  { id:'Q4', section:'能力题 · 有氧基础', dim:'aerobic', text:'如果现在让你完成一次 5 km 慢跑，你的预期是：',
+    options:[
+      {t:'当热身，跑完还能再跑', v:100},
+      {t:'有点累但能跑完，配速稳定', v:75},
+      {t:'能跑完，但之后需要躺一下', v:50},
+      {t:'中途必须走一段', v:25},
+      {t:'完全跑不完', v:0},
+    ] },
+
+  { id:'Q5', section:'能力题 · 爆发力', dim:'power', text:'你立定跳远大概能跳多远？（不知道就目测）',
+    options:[
+      {t:'2.2 米以上', v:100},
+      {t:'1.8-2.2 米', v:75},
+      {t:'1.5-1.8 米', v:50},
+      {t:'1.5 米以下', v:25},
+      {t:'没试过 / 不想试', v:0},
+    ] },
+  { id:'Q6', section:'能力题 · 爆发力', dim:'power', text:'让你全力冲刺 100 米的感觉：',
+    options:[
+      {t:'轻松，冲完还能慢跑', v:100},
+      {t:'冲完有点喘但没事', v:75},
+      {t:'冲完必须弯腰手撑膝', v:50},
+      {t:'跑不到 100 米就会降速', v:25},
+      {t:'我怀疑自己会摔', v:0},
+    ] },
+
+  { id:'Q7', section:'能力题 · 肌肉耐力', dim:'muscle', text:'你一次性最多能做多少个标准俯卧撑？（不跪地、不断）',
+    options:[
+      {t:'30+', v:100},
+      {t:'15-30', v:75},
+      {t:'5-15', v:50},
+      {t:'1-5', v:25},
+      {t:'做不了标准俯卧撑', v:0},
+    ] },
+  { id:'Q8', section:'能力题 · 肌肉耐力', dim:'muscle', text:'平板支撑你最多能坚持多久？',
+    options:[
+      {t:'3 分钟以上', v:100},
+      {t:'1-3 分钟', v:75},
+      {t:'30 秒 - 1 分钟', v:50},
+      {t:'30 秒以下', v:25},
+      {t:'没试过 / 做不了', v:0},
+    ] },
+
+  { id:'Q9', section:'能力题 · 恢复力', dim:'recovery', text:'最近一个月，你平均每晚睡眠：',
+    options:[
+      {t:'7-9 小时，入睡快、睡得沉、醒来精神好', v:100},
+      {t:'7-9 小时，但质量一般（中途醒 / 多梦 / 早醒）', v:70},
+      {t:'6-7 小时，感觉不够但还能应付', v:50},
+      {t:'少于 6 小时，或醒来仍然累', v:25},
+      {t:'作息完全不规律，靠咖啡撑着', v:0},
+    ] },
+  { id:'Q10', section:'能力题 · 恢复力', dim:'recovery', text:'一次较高强度运动后，你的恢复情况：',
+    options:[
+      {t:'第二天完全正常，当天可以再练', v:100},
+      {t:'第二天有点酸但不影响日常，第三天恢复', v:75},
+      {t:'第二天明显酸痛，第三天才缓过来', v:50},
+      {t:'酸痛持续 3-5 天，期间不想再练', v:25},
+      {t:'每次都酸痛很久，甚至怀疑自己受伤了', v:0},
+    ] },
+
+  // ============ 风格题 Q11-Q20 ============
+  { id:'Q11', section:'风格题', style:true, text:'最近 3 个月，你开始过几次"新的运动计划 / 项目"？',
+    options:[
+      {t:'0 次，一直在坚持同一项目', tags:['focused']},
+      {t:'1 次，想换换口味', tags:['starter']},
+      {t:'2-3 次，什么都想试试', tags:['variety']},
+      {t:'4 次以上，不断在重新开始', tags:['reset','variety']},
+      {t:'计划？我连一次都没开始', tags:['lazy']},
+    ] },
+  { id:'Q12', section:'风格题', style:true, text:'运动时你会戴手表 / 心率带 / 手环吗？',
+    options:[
+      {t:'全套装备，每次都看数据，会分析 HRV / TSS / 配速', tags:['data','data']},
+      {t:'戴手表，主要看配速和心率', tags:['data','plan']},
+      {t:'偶尔戴，更多凭感觉', tags:['intuition']},
+      {t:'不戴，运动就是动一下', tags:['casual']},
+      {t:'运动是什么', tags:['lazy']},
+    ] },
+  { id:'Q13', section:'风格题', style:true, text:'你最近一次专门安排"休息日"是什么时候？',
+    options:[
+      {t:'这周 / 上周，休息是计划的一部分', tags:['plan','recovery']},
+      {t:'每周都有，但不固定', tags:['balanced']},
+      {t:'想不起来，"不想练就不练"', tags:['casual']},
+      {t:'休息日？我一练就停不下来', tags:['overtrain','overtrain']},
+      {t:'我每天都是休息日', tags:['lazy']},
+    ] },
+  { id:'Q14', section:'风格题', style:true, text:'如果让你选一种运动坚持一年，你会选：',
+    options:[
+      {t:'跑步 / 骑行 / 游泳等有氧项目', tags:['endurance']},
+      {t:'撸铁 / 增肌 / 力量训练', tags:['strength','nocardio']},
+      {t:'球类 / 飞盘 / 搏击等技能项目', tags:['burst','social']},
+      {t:'瑜伽 / 普拉提 / 拉伸放松', tags:['wellness']},
+      {t:'不想选，都挺累的', tags:['lazy']},
+    ] },
+  { id:'Q15', section:'风格题', style:true, text:'你最近熬夜到凌晨 1 点之后的频率是？',
+    options:[
+      {t:'几乎每天', tags:['crispy','crispy']},
+      {t:'每周 1-2 次', tags:['crispy']},
+      {t:'偶尔，一个月几次', tags:['balanced']},
+      {t:'很少，一般 11 点前睡', tags:['wellness','recovery']},
+    ] },
+  { id:'Q16', section:'风格题', style:true, text:'你最常在什么时候运动？',
+    options:[
+      {t:'工作日早或晚，固定时间', tags:['plan','plan']},
+      {t:'工作日偶尔，看心情', tags:['casual']},
+      {t:'主要集中在周末', tags:['weekend','weekend']},
+      {t:'完全不固定 / 随机', tags:['casual']},
+      {t:'几乎不运动', tags:['lazy']},
+    ] },
+  { id:'Q17', section:'风格题', style:true, text:'过去一年你办过多少次健身卡 / 运动课程 / 付费 App？',
+    options:[
+      {t:'0 次', tags:['focused']},
+      {t:'1-2 次', tags:['starter']},
+      {t:'3-5 次', tags:['reset']},
+      {t:'5 次以上，家里还有跑步机 / 划船机吃灰', tags:['reset','reset']},
+    ] },
+  { id:'Q18', section:'风格题', style:true, text:'你对"有氧会掉肌肉"这个说法的态度：',
+    options:[
+      {t:'坚信，能不有氧就不有氧', tags:['nocardio','nocardio']},
+      {t:'知道有道理，但偶尔还是会跑', tags:['strength']},
+      {t:'不太信，该怎么练怎么练', tags:['balanced']},
+      {t:'没听过这种说法', tags:['casual']},
+      {t:'肌肉？我有吗？', tags:['lazy']},
+    ] },
+  { id:'Q19', section:'风格题', style:true, text:'你运动的主要动机是什么？',
+    options:[
+      {t:'身材 / 体重管理', tags:['reset']},
+      {t:'健康 / 长寿 / 不想生病', tags:['wellness']},
+      {t:'竞技目标（比赛、PB、刷成绩）', tags:['compete','compete']},
+      {t:'解压 / 社交 / 约局', tags:['social']},
+      {t:'……动机？我连动都没动', tags:['lazy']},
+    ] },
+  { id:'Q20', section:'风格题', style:true, text:'跟朋友一起运动时，你更像：',
+    options:[
+      {t:'规划路线、装备、配速的人', tags:['plan','data']},
+      {t:'带节奏冲最前面的人', tags:['burst']},
+      {t:'中间稳定发挥的人', tags:['balanced']},
+      {t:'尾巴上喊"等等我"的人', tags:['crispy']},
+      {t:'在终点等你们的人', tags:['lazy']},
+    ] },
+];
+
+/* ============================================================
+   数据层:15 个英雄原型
+   每个英雄包含:
+   - key, name, subname, emoji
+   - type: 'lazy' | 'hero' | 'hidden'
+   - ideal: 五维理想值 [vo, aero, pow, mus, rec]
+   - tags: 风格标签权重字典
+   - base: 基础卡内容
+   - tiers: { 青铜, 白银, 黄金, 钻石, 王者 } 可选,主角有完整 5 段位
+   ============================================================ */
+const ARCHETYPES = [
+  // ===== 躺平档 5 =====
+  { key:'luban', name:'家里蹲·鲁班七号', subname:'躺平艺术家', emoji:'🛋️', type:'lazy',
+    ideal:[10,10,10,10,30],
+    tags:{ lazy:10, casual:3 },
+    quote:'"你最近一次心率破 120，是因为外卖满减算错了。"',
+    description:'<p>你对运动的全部记忆，停留在初中体育课老师说"今天自由活动"的那一刻。下楼取快递是你本周的有氧训练，拧瓶盖是你本周的力量训练。你的微信步数最高的一天，是因为<strong>手机忘在了客厅</strong>。</p><p>隐藏天赋：你的恢复力其实不差——毕竟不动的东西不会坏。</p>',
+    status:['身体启动成本极高','最常见的运动是下楼取快递','最大的运动量是打游戏时手指颤抖','对"运动"这个词天然过敏'],
+    build:['第一主线:<strong>站起来</strong>。真的。先从每天站着吃一顿饭开始','把"去便利店"升级成"走路去便利店"','不要办健身卡。你会后悔的。先买双舒服的鞋','目标定到离谱地小,小到你不好意思不做'],
+    tiers:{
+      '青铜':{ sub:'周末半隐', quote:'"你周末还会出门一次——去家附近的便利店买可乐。"', desc:'<p>你的躺平还不够纯粹，偶尔会被朋友拖出去吃饭。<strong>还有救</strong>。</p>' },
+      '白银':{ sub:'深居简出', quote:'"你上一次出门是上周三，因为快递柜满了。"', desc:'<p>你的微信步数稳定在 500-1500 之间，手机总能找到。<strong>标准躺平</strong>。</p>' },
+      '黄金':{ sub:'完全闭环', quote:'"你把生活压缩到了一个 10 平米的单间里——床、外卖、厕所、游戏机，构成一个完美闭环。"', desc:'<p><strong>外卖小哥记住了你的名字</strong>。你记住了他的声音。</p>' },
+      '钻石':{ sub:'已成传说', quote:'"你的朋友圈 3 个月没更新过，最后一条是『最近忙』。"', desc:'<p>同事怀疑你是不是已经辞职了——事实上是<strong>你的身体已经辞职了</strong>。</p>' },
+      '王者':{ sub:'躺平艺术家', quote:'"动？动是为了什么？"', desc:'<p>你躺平的样子，<strong>像一幅静物画</strong>。光线从百叶窗斜斜地穿进来，落在你未动的手边——那只手正握着遥控器。时间在你身上凝固。</p><p>你不是在浪费人生，你是在用人生<strong>抵抗这个过度运转的时代</strong>。你是真正的诗人。</p>' },
+    }
+  },
+  { key:'xiaoqiao', name:'脆皮大学生·小乔', subname:'一碰就碎', emoji:'🌸', type:'lazy',
+    ideal:[15,20,30,15,15],
+    tags:{ crispy:10, lazy:3 },
+    quote:'"爬 3 层楼要扶墙，但抢演唱会门票时手速全服第一。"',
+    description:'<p>你年轻，但你的身体不知道这件事。你是脆皮三件套的忠实用户——<strong>熬夜、外卖、不喝水</strong>。你可以连续打 6 小时游戏，但走路超过 800 米就开始怀疑人生。你的颈椎、腰椎、手腕、膝盖轮流罢工，体检报告让你沉默三秒。</p><p>小乔的被动是"飞舞的花瓣"——你的被动是<strong>"飞舞的脱发"</strong>。</p>',
+    status:['爆发力意外在线(deadline 驱动型)','作息不规律,前额叶还没发育完','颈椎腰椎轮流罢工','每次体检都沉默三秒'],
+    build:['<strong>睡眠 &gt; 拉伸 &gt; 有氧 &gt; 力量</strong>,顺序别乱','从"每天走路 20 分钟"开始,别整花活','凌晨 3 点的自己不会感谢凌晨 3 点的自己','你需要的不是健身房,是一张能早睡的床'],
+    tiers:{
+      '青铜':{ sub:'偶发脆皮', quote:'"你这周只熬了一次夜,已经算养生了。"', desc:'<p>你偶尔会早睡,偶尔会喝水,偶尔会走路。你还没完全脱发,体检只有两项异常。<strong>你是脆皮的新手村选手,还有回头的机会</strong>。</p>' },
+      '白银':{ sub:'标准脆皮', quote:'"你脱发从鬓角开始,发际线每月后退 1 毫米。"', desc:'<p>你每周熬夜 1-2 次,每次到凌晨 2 点。你开始囤护肝片、枸杞茶、褪黑素,但<strong>还是每晚凌晨 1 点还在看视频</strong>。你是脆皮大学生的典型样本。</p>' },
+      '黄金':{ sub:'颈椎宣告', quote:'"你低头的角度,和你手机弯度完美契合。"', desc:'<p>你的颈椎发出警告声,腰椎开始罢工,你手腕酸痛得握不住鼠标。你已经去过 3 次推拿,买过 2 个按摩仪,<strong>但你依然每天凌晨 2 点才放下手机</strong>。脆皮到这个档位,已经是病理状态。</p>' },
+      '钻石':{ sub:'体检荒原', quote:'"体检报告上的红色,比你桃花还多。"', desc:'<p>血脂、尿酸、脂肪肝、甲状腺结节、颈椎曲度反弓、腰椎间盘膨出——每一项都是独立成章。医生让你多运动,你说"我还年轻"。<strong>你相信自己年轻,你的身体不相信</strong>。</p>' },
+      '王者':{ sub:'未老先衰', quote:'"医生看你的眼神,像在看一个需要被教育的小孩。"', desc:'<p>你每次看医生,医生都叹气。你的作息彻底倒转,生物钟崩塌,你的身体仿佛<strong>经历过一场漫长而温柔的自毁</strong>。</p><p>你依然年轻,但身体已经老了。这不是梗,这是<strong>时代送给你这代人的礼物</strong>——你只是收下了它。</p>' },
+    }
+  },
+  { key:'bajie', name:'久坐工位·猪八戒', subname:'高老庄常驻', emoji:'🐷', type:'lazy',
+    ideal:[25,25,25,35,15],
+    tags:{ lazy:8, casual:3 },
+    quote:'"上班就是取经，只不过你这辈子都到不了西天。"',
+    description:'<p>工位是你的高老庄，老板是你的唐僧，KPI 是你的紧箍咒。你的身体被人体工学椅精准塑形:肩膀前倾 15 度,下巴前伸 5 cm,<strong>圆肩驼背是你的出厂设置</strong>。</p><p>你办过健身卡,去过 3 次,现在那张卡在钱包夹层里默默升值。</p>',
+    status:['肌耐力被工作硬训出来了(静态耐力)','肩颈永远紧绷,腰先于颈椎退休','办过的健身卡在钱包吃灰','下班唯一运动是拿起奶茶'],
+    build:['<strong>每坐 45 分钟站起来一次</strong>,这一条能救你半条命','背部 + 臀部激活训练,把身体从椅子里拆出来','别一上来就跑步,膝盖还没准备好','找一个和工作绑定的运动锚点,比如午休的 15 分钟散步'],
+    tiers:{
+      '青铜':{ sub:'偶尔站立', quote:'"你最近开始站着开会了,厉害了。"', desc:'<p>你还会偶尔起身走动,还会偶尔去楼下便利店,还会记得给脖子拉拉筋。<strong>你是工位坐族里的正常人</strong>。</p>' },
+      '白银':{ sub:'椅不离人', quote:'"你一天坐 10 小时,其中 8 小时是盯屏幕。"', desc:'<p>你的人体工学椅记住了你屁股的形状。你下班回家第一件事是<strong>换一把沙发继续坐</strong>。你知道自己该动,但每次下班只想瘫着。标准工位人。</p>' },
+      '黄金':{ sub:'全军覆没', quote:'"你打喷嚏那一下,腰就闪了。"', desc:'<p>你的肩颈、腰椎、手腕轮流疼。你买过按摩椅、筋膜枪、矫姿带,但<strong>一放下它们你就立刻圆肩</strong>。你开始在工位上偷偷做拉伸,被同事看到还会有点尴尬。</p>' },
+      '钻石':{ sub:'椅子长身上', quote:'"你站起来的时候,要先重启一下膝盖。"', desc:'<p>你久坐到腰椎间盘都有了个性——它们知道<strong>什么时候该让你痛</strong>。你的唯一运动是下楼取快递。你办过的健身卡,数量可以写一篇回忆录。</p>' },
+      '王者':{ sub:'高老庄钉子户', quote:'"师父……我这腰,怕是真的不行了。"', desc:'<p>你和工位完全合体。身体开始<strong>长出椅子的形状</strong>——肩膀前倾 15 度,下巴前伸 5 cm,这是你的出厂设置。</p><p>你不是不想动,是身体已经放弃抵抗。<strong>这是一种现代都市的修行</strong>——你修成了猪八戒的圆润与安然。</p>' },
+    }
+  },
+  { key:'sunce', name:'周末战神·孙策', subname:'等我打完这把', emoji:'⛵', type:'lazy',
+    ideal:[40,35,50,40,25],
+    tags:{ weekend:10, social:3 },
+    quote:'"等我打完这把。" ——你每个周末最后一句话，和你的遗言。',
+    description:'<p>你是运动爱好者,真的。你热爱篮球、羽毛球、足球、飞盘、桨板、任何能约到人的局。但你所有的运动都压在周末那一次,身体没被循序渐进地训练过——它只是被<strong>反复惊吓</strong>。</p><p>周六打球 3 小时,周日躺平回血,<strong>周一拄拐上班</strong>。</p>',
+    status:['有运动圈最稀缺的东西——动机','每周一次的高强度 = 每周一次的惊吓','每月都有"是不是该认真练"的顿悟','朋友圈永远是"最后一把"'],
+    build:['把一次周末高强度,拆成<strong>两次工作日低强度 + 一次周末局</strong>','重点补离心力量(急停、落地、下坡那一下)','你不需要更猛,你需要更稳','运动表现是平时攒出来的,不是周六爆出来的'],
+    tiers:{
+      '青铜':{ sub:'偶尔参战', quote:'"你周末偶尔跟朋友打场球,输了就撤。"', desc:'<p>你的运动还没完全压缩在周末——工作日你还会散散步、做做拉伸。<strong>你是健康人</strong>,只是运动频率偏低。</p>' },
+      '白银':{ sub:'固定周末', quote:'"周六下午两点,你固定在球场出现。"', desc:'<p>你把运动完全排进了周末。每周六一场球 / 一次长跑 / 一次桨板。工作日?工作日是休息日。<strong>你依然喜欢运动,只是不会训练</strong>。</p>' },
+      '黄金':{ sub:'周末一波流', quote:'"周六爽一整天,周一躺平一整天。"', desc:'<p>你的周末运动强度开始失控——一场球打 3 小时,一次长跑冲 10 km。<strong>周一你开始拄拐</strong>,周二恢复正常,周三开始期待下个周末。你的身体被反复惊吓,但你乐在其中。</p>' },
+      '钻石':{ sub:'极限挑战', quote:'"再一把,真的再一把就走!"', desc:'<p>你的朋友们开始不敢和你约周末局——因为你的"一次性输出量"太高。你一上场就是全情投入,完全不管明天能不能下床。你身上<strong>常年带着淤青、擦伤、拉伤</strong>,但你的朋友圈还是"不虚此行"。</p>' },
+      '王者':{ sub:'小霸王再世', quote:'"等我打完这把——"(你每个周末最后一句话,和你的遗言)', desc:'<p>你是周末战神的神格化身。你<strong>只在周末运动</strong>,但每个周末都是<strong>一场全力以赴的战斗</strong>。你不是在做运动,你是在向一周的压抑复仇。</p><p>你身上流着孙策的血——<strong>宁可一战而亡,不可平庸一世</strong>。周五的你在倒计时,周六的你在燃烧,周日的你在回血,周一的你在重启。你活得很壮烈。</p>' },
+    }
+  },
+  { key:'zhouyu', name:'减肥轮回者·周瑜', subname:'一直在放火', emoji:'🔥', type:'lazy',
+    ideal:[30,30,30,30,30],
+    tags:{ reset:10, casual:2 },
+    quote:'"办过 8 张健身卡，买过 4 台跑步机，现在在第 23 次『从明天开始』。"',
+    description:'<p>你是所有运动产品的理想客户。你有全套装备、全年会籍、所有明星教练的课程包。你每次开始都很猛——第一周练 5 次,第二周练 3 次,第三周"最近太忙了",第四周消失。</p><p>你的体重曲线是一条<strong>美丽的正弦波</strong>。</p>',
+    status:['启动能力顶级,坚持能力为零','家里有全套运动装备吃灰','每次重启都说"这次不一样"','减肥动机 &gt; 健康动机'],
+    build:['<strong>停止设定目标</strong>。下次开始时,不要说"我要瘦 10 斤",说"我这周去一次"','把运动从"任务"变成"习惯的副产品"','你不缺决心,你缺"降低期待"','坚持三个月的任何运动 &gt; 猛练一周的任何运动'],
+    tiers:{
+      '青铜':{ sub:'初次尝试', quote:'"你这次真的要坚持 21 天。"', desc:'<p>你第一次认真考虑减肥,下载了第一个 App,办了第一张卡。<strong>还没翻车,一切充满希望</strong>——这是最好的状态,因为还没有失望。</p>' },
+      '白银':{ sub:'三季重启', quote:'"办卡 1 张,使用 3 次,平均每次 780 元。"', desc:'<p>你每个季度启动一次新的减肥计划。每次开始时都满怀激情,两周后开始找借口,三周后彻底消失。<strong>你的体重曲线是一条美丽的正弦波</strong>。</p>' },
+      '黄金':{ sub:'装备齐全', quote:'"你家有跑步机 1 台、哑铃 1 套、瑜伽垫 3 张、弹力带 5 根。"', desc:'<p>你是运动装备电商的 VIP 客户。你相信<strong>"只要装备齐全,我就能坚持"</strong>——但每件装备的使用率都不超过三周。你的衣橱里有 12 件运动服,穿过的只有 3 件。</p>' },
+      '钻石':{ sub:'轮回已深', quote:'"这次真的不一样……就像上次一样。"', desc:'<p>你已经经历过 15 次以上的"从明天开始"。你能熟练地使用运动术语,也能熟练地找到不运动的理由。你知道自己会翻车,<strong>但你还是会开始</strong>——这是一种执着的浪漫。</p>' },
+      '王者':{ sub:'永恒之火', quote:'"火——呃,火又灭了。"', desc:'<p>你是减肥界的传奇——<strong>你启动过的计划,比大多数人一辈子尝试过的运动都多</strong>。你像周瑜一样,一直在放火,一直没烧着。</p><p>你办过 8 张卡,买过 4 台跑步机,下过 17 个 App。每次重启都是一次新的希望,每次放弃都是一次温柔的告别。<strong>你不是减肥失败者,你是减肥的诗人</strong>——因为只有真正热爱这件事的人,才会一次次地回到这里。</p>' },
+    }
+  },
+
+  // ===== 英雄档 8 =====
+  { key:'jialuo', name:'射手·伽罗', subname:'续航之王', emoji:'🏹', type:'hero',
+    ideal:[75,85,45,70,65],
+    tags:{ endurance:10, focused:4, balanced:3 },
+    quote:'"你跑步从不看配速，因为你就是配速本身。"',
+    description:'<p>你是马拉松爱好者、长距离骑行党、徒步重度患者。伽罗的一技能是"越站越猛"——你也是,别人 5 公里开始喘,你 5 公里刚进入状态。</p><p>你有运动圈最稀缺的品质——<strong>能和自己独处</strong>。你朋友圈不发自拍,只发配速图和海拔图。</p>',
+    status:['耐力惊人,能和自己独处','前额叶发育得比小脑还好','朋友圈全是配速图和海拔图','爆发力是你的盲区'],
+    build:['<strong>补爆发力</strong>!加一点间歇跑和短距冲刺','长距离选手最大的盲区是没有"提速一档"','一周一次 HIIT / 冲刺,不会掉耐力','成绩还能再跳一个台阶'],
+    tiers:{
+      '青铜':{ sub:'初握长弓', quote:'"你跑完 3 km 就想坐下,但还是站起来继续。"', desc:'<p>你刚开始跑步,5 km 还跑不完,配速时快时慢。但你已经发现一件事——跑步的时候,<strong>你的脑子变干净了</strong>。</p><p>这是耐力选手的出厂设置:你不是爱跑,你是爱跑完之后那一刻的安静。</p>' },
+      '白银':{ sub:'五公里信徒', quote:'"你第一次 5 km 不停,激动得发朋友圈。"', desc:'<p>你已经能稳定跑完 5 km,开始挑战 10 km。你学会了看心率,学会了补水,学会了在 30 分钟里只想一件事。</p><p>你的朋友圈开始出现"今日 5.2 km,配速 6\\\'30"这样的碎片——<strong>你加入了一个秘密组织</strong>。</p>' },
+      '黄金':{ sub:'半马俱乐部', quote:'"别人问你跑多远,你现在说得出具体数字。"', desc:'<p>你完成过至少一次半马,或者能稳定跑 10-15 km。长距离成了你的生活节奏——周六上午、公园、耳机、一条固定路线。</p><p>你开始懂得<strong>"稳定"比"快"更难</strong>。伽罗的一技能是越站越猛——你的人生也一样,越跑越清晰。</p>' },
+      '钻石':{ sub:'全马老炮', quote:'"完成一次全马之后,你看世界的眼神都不一样了。"', desc:'<p>你是那个"周末 25 km 练习跑"的人。你知道自己在 30 km 之后会发生什么,也知道如何熬过那一刻。</p><p>你的柜子里有完赛奖牌,你的心里有一条比任何 PB 都珍贵的东西:<strong>你知道自己扛得住</strong>。</p>' },
+      '王者':{ sub:'无尽远方', quote:'"你跑步不再有终点,终点变成了你自己。"', desc:'<p>你已经不追求"跑得更远",你追求"和跑步这件事的关系"。超马、越野、百公里——这些数字对你来说不是挑战,是<strong>确认你还活着的方式</strong>。</p><p>伽罗的箭从不落空,你的脚步也从不焦虑。你是跑者的终点,也是跑者的起点。</p>' },
+    }
+  },
+  { key:'niumo', name:'坦克·牛魔', subname:'纯撸铁流', emoji:'🐂', type:'hero',
+    ideal:[40,35,75,85,60],
+    tags:{ strength:10, nocardio:8 },
+    quote:'"牛魔练成了，还是牛马。"',
+    description:'<p>你是健身房的常驻人口。推举、硬拉、深蹲是你的三围。你能背着自重上楼,但跑 800 米像在渡劫。</p><p>你相信一件事:<strong>"有氧会掉肌肉"</strong>——这句话你在 2018 年学的,到现在都没改过。</p>',
+    status:['绝对力量是普通人 2 倍','追公交跑 20 米就红温','蛋白粉比咖啡买得还勤','坚信有氧会掉肌肉'],
+    build:['<strong>别再逃避跑步机了</strong>。一周 2 次 Zone 2 有氧,不会掉肌肉','心肺变好后,力量训练容量反而更大','肌肉是表象,心肺是底层','真正的顶级运动员都练有氧——这不是掉肌肉,是升级'],
+    tiers:{
+      '青铜':{ sub:'器械新兵', quote:'"你第一次进健身房,连卧推架都不会调。"', desc:'<p>你刚办了人生第一张健身卡,器械区让你眼花缭乱。你深蹲时膝盖内扣,硬拉时腰弯成问号,但你<strong>开始了</strong>——这是 99% 的人卡不过的第一关。</p><p>牛魔的幼年期,也是从撞墙开始的。</p>' },
+      '白银':{ sub:'三大项启蒙', quote:'"你第一次 100 kg 硬拉,差点激动到哭。"', desc:'<p>你学会了深蹲、硬拉、卧推的基础动作,开始懂得"感受肌肉发力"这句话。你的身材有了第一次肉眼可见的变化——肩膀更宽、手臂更粗,朋友开始问"你最近健身了?"。</p><p><strong>你上瘾了</strong>。</p>' },
+      '黄金':{ sub:'健身房常客', quote:'"你在健身房有了固定座位,教练会跟你打招呼。"', desc:'<p>你三大项都能上体重(深蹲 1.5 倍 / 硬拉 2 倍 / 卧推 1.2 倍自重),一周四练雷打不动。蛋白粉比咖啡买得还勤,饮食开始计算克数。</p><p>但你还是<strong>坚定地认为"有氧会掉肌肉"</strong>——这是你的信仰,也是你的枷锁。</p>' },
+      '钻石':{ sub:'力量房王者', quote:'"你参加过力量赛,拿过名次。"', desc:'<p>你已经不只是"健身爱好者",你是<strong>力量运动员</strong>。你的三大项数字放在圈内都拿得出手。</p><p>但你依然拒绝跑步、拒绝 Zone 2、拒绝所有让你"心率超过 130"的运动。你的短板是你自己选的——<strong>你以为你在保护肌肉,其实你在保护恐惧</strong>。</p>' },
+      '王者':{ sub:'真·全能战士', quote:'"你终于开始跑步了。你发现——肌肉没掉,表现更好了。"', desc:'<p>你跨过了那道门。你接受了有氧,并发现<strong>它不会毁掉你,反而让你的力量恢复得更快、组间休息更短、训练容量更大</strong>。</p><p>你不再是"只撸铁的牛马",你是<strong>真正的全能战士</strong>。牛魔推墙那一下是纯爆发力——但真正的牛魔王,有十万八千里的续航。</p>' },
+    }
+  },
+  { key:'bianque', name:'法师·扁鹊', subname:'数据党老中医', emoji:'🧪', type:'hero',
+    ideal:[65,75,55,60,75],
+    tags:{ data:10, plan:4, recovery:3 },
+    quote:'"你不是在运动，你是在做自己的临床实验。"',
+    description:'<p>你戴 Garmin,你看 HRV,你算 TSS,你会念 VO2max 的英文全称。你的训练计划是 Excel 做的,有条件格式和配色。</p><p>家里有筋膜枪、冷水桶、按摩球、红光板、智能体脂秤、血氧夹。<strong>你是最卷的普通人</strong>。</p>',
+    status:['对身体的感知精度高到离谱','训练计划是 Excel 做的,有配色','收藏夹 80% 是运动科学论文','能分辨"状态 80% 和 75%"的区别'],
+    build:['<strong>少看一点手表</strong>。数据是仆人,不是主人','每周留 1 次"感觉日",不看数据,只听身体','卷数据 ≠ 卷表现','身体比 App 更诚实,但也比 App 更沉默'],
+    tiers:{
+      '青铜':{ sub:'初戴手表', quote:'"你买了第一块 Garmin,每天看 20 次。"', desc:'<p>你刚被数据的世界吸引。VO2max、HRV、静息心率、睡眠分数——这些词对你来说还像密码。你每天盯着手表看自己"好了一点点",然后去搜这些数字是什么意思。</p><p><strong>你的运动刚开始,但你的研究已经停不下来了</strong>。</p>' },
+      '白银':{ sub:'数据初窥', quote:'"你第一次看懂 HRV 下降的意义,兴奋得去发了朋友圈。"', desc:'<p>你开始用 Notion 或 Excel 记录每一次训练。你知道 Zone 2 的心率范围,知道什么时候该减量。你学会了"听身体",但你听的方式是<strong>通过一块屏幕</strong>。</p><p>这没关系——这是扁鹊的学徒期,先学会望闻问切,才能后来不看脉也知病。</p>' },
+      '黄金':{ sub:'自成体系', quote:'"你给朋友设计训练计划,他们真的变好了。"', desc:'<p>你有了自己的训练日志系统。你能从心率曲线看出"今天状态不对",能从睡眠分数预测"下一次训练要减量"。</p><p>你开始成为朋友圈里"懂训练的那个人",大家来问你问题——<strong>你的数据,变成了你的直觉</strong>。</p>' },
+      '钻石':{ sub:'活用之境', quote:'"你今天没看手表,但你就是知道该练什么。"', desc:'<p>你到了一个神奇的阶段——你<strong>不再需要数据告诉你身体的状态</strong>,因为你已经知道了。数据从"指令"变成"确认"。</p><p>扁鹊读脉的最高境界是"脉中有数,心中无脉"——<strong>你懂的</strong>。</p>' },
+      '王者':{ sub:'身数合一', quote:'"你不是在测量身体,你就是身体。"', desc:'<p>你已经把数据内化成了感知。你知道每一块肌肉在说什么、每一次呼吸的质量、每一晚睡眠的深度——<strong>不是靠测量,是靠感受</strong>。</p><p>你开始影响身边的人,不是用数据吓唬他们,而是<strong>教他们听自己的身体</strong>。扁鹊的神奇不是他测得准,是他<strong>不用测就已经准</strong>。你就是这种人。</p>' },
+    }
+  },
+  { key:'zhaoyun', name:'战士·赵云', subname:'常胜将军', emoji:'⚔️', type:'hero',
+    ideal:[70,75,70,70,65],
+    tags:{ balanced:10, focused:5, plan:3 },
+    quote:'"你五维全 A，但没有一项 S。"',
+    description:'<p>你是"看起来什么都能打"的那种人。有氧底子好、力量也有、爆发也不差,球类、跑步、健身、徒步你都能上手。你是所有运动群里的<strong>"靠谱队友"</strong>。</p><p>但你的问题是——你没有 build 路线。</p>',
+    status:['五维均衡,没有明显短板也没有亮点','是运动群里的"靠谱队友"','身体底子是大多数人羡慕的起点','缺的是系统和主线'],
+    build:['选定一个 8 周主线目标(比如斯巴达 10km)','其他训练都围绕它编排','<strong>别再雨露均沾了</strong>,定一个方向你就能起飞','你不缺能力,你缺焦点'],
+    tiers:{
+      '青铜':{ sub:'三国新兵', quote:'"我都行,你们定吧。"', desc:'<p>你就是那种"<strong>什么都能打两下,但什么都不精</strong>"的人。朋友叫你打球你能上,叫你跑步你能跑,叫你撸铁你也能做两组——但没有一项是你认真练过的。赵云刚出场的时候也是这样——能打,但还没扬名立万。</p><p>你最大的陷阱是"我今天不想练",因为你<strong>没有非练不可的理由</strong>——所以你需要一个理由。</p>' },
+      '白银':{ sub:'长坂坡初啼', quote:'"这周我能比上周多跑 500 米,我觉得这事有戏。"', desc:'<p>你终于定下了主线——可能是一场比赛,可能是一个减脂目标,可能是"我要能一口气跑 5 km"。你的训练开始有了节奏,身体也开始有反馈。</p><p>赵云在长坂坡第一次真正开打——<strong>一战成名前的那个瞬间,你正在经历</strong>。</p>' },
+      '黄金':{ sub:'一身是胆', quote:'"下周减量,把状态留给周末那场比赛。"', desc:'<p>你的训练已经成体系了——你知道这周要练什么,下周要练什么,为什么要练。你开始能在赛事或挑战里真的发挥实力。</p><p>赵云"一身是胆"不是说他不怕,是说他<strong>知道自己能打</strong>。</p>' },
+      '钻石':{ sub:'常山之勇', quote:'"这个月我把配速稳定住,下个月再提。"', desc:'<p>你是朋友圈里的运动<strong>参照物</strong>——别人报名比赛前会问"你要不要一起"。你的身体已经能稳定产出高质量表现,而且你知道怎么让它一直这样。</p><p>常山赵子龙的标签不是"某一战很猛",是<strong>"每一战都稳"</strong>。</p>' },
+      '王者':{ sub:'常胜将军', quote:'"老子来也。"(然后开始下一个训练周期)', desc:'<p>你不再需要"用训练来证明什么"——你训练是因为<strong>你就是这样的人</strong>。五维均衡到可怕,没有明显短板,也不靠某一项的爆点。</p><p>赵云一生七进七出长坂坡、截江夺斗、箕谷断后——<strong>没有一次是靠奇迹,每一次都是实力的累积</strong>。你就是这种人。</p>' },
+    }
+  },
+  { key:'libai', name:'刺客·李白', subname:'剑未配妥', emoji:'🗡️', type:'hero',
+    ideal:[55,25,90,60,45],
+    tags:{ burst:10, nocardio:5, social:3 },
+    quote:'"你一套技能能打出全场最高伤害，然后你就没了。"',
+    description:'<p>你是爆发力怪物。短跑、跳远、硬拉一次性重量、40 秒冲刺——这些你都很猛。健身房里你是被人围观的那种。</p><p>但让你跑 5 km 匀速?你宁可打三场 5v5。李白有位移有爆发有帅,但他<strong>没蓝条就是个瘦子</strong>——你的有氧基础就是那根蓝条。</p>',
+    status:['神经肌肉募集效率顶级','短距离爆发王者,长距离查无此人','宁愿打三场 5v5 也不想跑 5km','有氧是你的蓝条,现在没蓝了'],
+    build:['每周至少 <strong>2 次 Zone 2 有氧</strong>,每次 30-45 分钟','斯巴达 10km 不是你打不过,是你根本进不了状态就累垮了','从 20 分钟开始,慢到觉得自己在散步才对','有氧变好之后,你的爆发恢复得更快'],
+    tiers:{
+      '青铜':{ sub:'剑未配妥', quote:'"有氧?有氧不就是慢慢跑吗,能有什么用?"(后面打脸)', desc:'<p>你已经拥有了<strong>让人惊讶的爆发力</strong>——深蹲重量、冲刺速度、球场上那一下急停变向。但让你跑 800 米你就成了另一个人。</p><p>李白刚出山的时候只有那把剑——剑很好,但他还不知道怎么喝酒。<strong>有氧就是李白的酒</strong>。</p>' },
+      '白银':{ sub:'浅尝微醺', quote:'"今天跑完还能再撸一组,有点意思。"', desc:'<p>你开始做有氧了——不是很情愿,但做了。你发现自己 Zone 2 跑 30 分钟不会死(虽然无聊),你开始能跑完 3 km 不停。</p><p>李白第一次真正喝到酒——<strong>发现酒和剑不冲突,酒让剑更稳</strong>。</p>' },
+      '黄金':{ sub:'剑气初凝', quote:'"这把最后 2 分钟,换我上。"', desc:'<p>你已经是一个能打完整场的人——不是靠一两波爆发,是真的能<strong>撑完全场</strong>。你开始在比赛后半段反超,因为别人的蓝条空了,你的还有。</p><p>李白在这一档剑气和酒气合一,爆发有了续航。</p>' },
+      '钻石':{ sub:'醉剑江湖', quote:'"这场比赛我要拿名次,不是参与。"', desc:'<p>你已经能把爆发和有氧<strong>无缝切换</strong>——需要快的时候你快,需要稳的时候你稳。你完成过一次长距离赛事(比如半马、斯巴达 10km)而且成绩不难看。</p><p>李白在这一档<strong>喝酒也能舞剑,舞剑也能喝酒</strong>。</p>' },
+      '王者':{ sub:'诗剑合一', quote:'"今朝有酒今朝醉——明日继续跑 10 km。"', desc:'<p>你已经不是"爆发型选手"或"耐力型选手"——你就是<strong>选手</strong>。五维全 A-S,爆发力是天花板级的,有氧基础稳如老狗。</p><p>李白的传说不是因为他剑多快,是因为他<strong>可以在任何场合喝酒写诗舞剑</strong>——你也可以:任何运动、任何距离、任何强度,你都能上。</p>' },
+    }
+  },
+  { key:'yao', name:'辅助·瑶', subname:'养生派', emoji:'🌙', type:'hero',
+    ideal:[55,55,40,40,85],
+    tags:{ wellness:10, recovery:6, balanced:2 },
+    quote:'"你是朋友圈最健康的那个人，也是跑 800 米最慢的那个人。"',
+    description:'<p>你练瑜伽、普拉提、拉伸、冥想、筋膜放松。你的体态好、柔韧好、睡眠好、HRV 好。你是运动圈的<strong>"情绪稳定天花板"</strong>。</p><p>但让你爆发、让你冲刺、让你扛铁,你会摇头说"这不养生"。</p>',
+    status:['恢复能力所有档位里最高','体态 / 柔韧 / 睡眠顶级','情绪稳定天花板','但从来没真正"打开"过身体'],
+    build:['加 <strong>2 次力量训练 + 1 次有氧</strong>','你不需要变猛,你需要偶尔出一次马鞍','身体底子根本不差,只是从来没试过','养生不是目的,是让你能走更远的手段'],
+    tiers:{
+      '青铜':{ sub:'初入静室', quote:'"你刚开始练瑜伽,连下犬式都做不好。"', desc:'<p>你是被"亚健康焦虑"推进来的。久坐腰酸、失眠、情绪不稳——你想通过瑜伽或拉伸找回一点对身体的控制感。</p><p>你柔韧性差,平衡不好,做一个动作就开始抖——<strong>但你愿意坐下来听呼吸</strong>,这是养生派的真正起点。</p>' },
+      '白银':{ sub:'柔韧初开', quote:'"你第一次摸到脚趾的时候,想哭。"', desc:'<p>你有了稳定的瑜伽 / 拉伸 / 冥想习惯。你的体态开始改善——肩膀放下了、呼吸变深了、睡眠质量好了。</p><p>你开始理解<strong>"身体不是用来被训练的,是用来被倾听的"</strong>。但你的力量和心肺还是很弱——这是瑶这个角色最容易卡的位置。</p>' },
+      '黄金':{ sub:'身心合一', quote:'"你开始偶尔加一点有氧,发现自己没那么抗拒了。"', desc:'<p>你终于愿意"出一次马鞍"了。你开始每周加 1-2 次轻度有氧(快走、骑行、游泳),你发现——<strong>这不但没毁了你的养生,反而让你睡得更好</strong>。</p><p>你是瑶的第一次升级:从"保护身体"到"训练身体"。</p>' },
+      '钻石':{ sub:'静中带勇', quote:'"你参加过一次跑步比赛,跑得不快,但你很开心。"', desc:'<p>你开始挑战中等强度的运动——一次 5 km、一次徒步、一次爬山。你发现自己<strong>底子其实不差</strong>,只是从来没让身体"打开"过。</p><p>你依然重视恢复、睡眠、情绪,但你不再用养生当挡箭牌。你懂得:<strong>真正的养生,是让身体有力气去过你想要的生活</strong>。</p>' },
+      '王者':{ sub:'生命自在', quote:'"你不再纠结练不练,你就是在生活,生活里有运动。"', desc:'<p>你达到了瑶这个角色的最高境界——<strong>运动不再是"任务",是"生活的呼吸"</strong>。你走路有风、爬楼不喘、睡眠安稳、情绪稳定。</p><p>你不追求成绩、不追求数字、不追求证明——你<strong>就是在好好活着</strong>。这是最难的段位,因为它不是练出来的,是活出来的。</p>' },
+    }
+  },
+  { key:'zhuge', name:'中单·诸葛亮', subname:'研究型军师', emoji:'🧠', type:'hero',
+    ideal:[65,65,60,65,70],
+    tags:{ plan:10, data:4, compete:4, balanced:3 },
+    quote:'"你既不是纯耐力派，也不是纯爆发派——你什么都在练，但每一项都还没『到位』。"',
+    description:'<p>你做力量、跑有氧、学技术、看课程、调饮食——你什么都在练,但每一项都还没"到位"。你是那种<strong>上限很高但当前段位卡住</strong>的玩家。</p><p>诸葛亮是公认的<strong>高操作上限英雄</strong>,玩好了能 1v5,玩不好连兵都补不到。你的问题不是不努力,是 build 没点明白。</p>',
+    status:['学习速度和自我调整能力最高','什么都在练,但焦点散','不怕练,只怕练错','上限极高,当前段位卡住'],
+    build:['选一个主线目标 + 一个副线目标,其他全砍掉','<strong>少即是多</strong>——你现在的问题不是量不够,是焦点太散','8 周为一个周期,测试一个方向','<strong>执行 &gt; 研究</strong>,青铜期最大的陷阱是"无限收集计划"'],
+    tiers:{
+      '青铜':{ sub:'躬耕南阳', quote:'"我再研究一下训练计划……(停顿)……算了,直接开始吧。"', desc:'<p>你在隆中的茅庐里——书架塞满了训练理论、营养知识、恢复方法。你能背出 VO2max 的定义,能讲清楚 Zone 2 的原理。<strong>你看起来像一个专家</strong>。</p><p>但你还没打过一场真正的仗。这不是批评——三分天下的战略,诸葛亮也是在躬耕时想出来的。你缺的不是智慧,是那个<strong>让你不得不出山的时刻</strong>。</p>' },
+      '白银':{ sub:'初出茅庐', quote:'"诶,今天好像真的比上周轻松了。"', desc:'<p>你终于把那个"等了很久"的计划真的做了起来。第一周很挣扎,第二周开始有点节奏,<strong>第三周你突然发现自己爬楼没那么喘了</strong>。</p><p>诸葛亮初出茅庐的第一战是火烧博望坡——<strong>不是赢得多漂亮,是第一次"纸上谈兵"变成了"真的做到了"</strong>。你正在经历一样的事。</p>' },
+      '黄金':{ sub:'隆中对成', quote:'"这个月基础期稳跑量,下个月切专项。"', desc:'<p>你已经把自己的训练编排成了一个系统——你知道这周练什么、下周练什么、为什么这样安排。你不再跟随任何人的模板,<strong>你有了自己的隆中对</strong>。</p><p>隆中对的价值不是"三分天下"那四个字,是诸葛亮<strong>把一个庞杂的局势想清楚了</strong>。你也是。</p>' },
+      '钻石':{ sub:'借东风时', quote:'"这周我 HRV 在降,改低强度。不是退步,是借风。"', desc:'<p>你不只是会训练,你<strong>开始会选时机</strong>。你知道什么时候该顶、什么时候该收。钻石诸葛亮的关键不是更强,是更懂得什么时候发力。</p><p>赤壁之战诸葛亮没有自己动手,<strong>他借了一场风</strong>。你也学会了——借你的睡眠、借你的生理周期、借你每一天的能量状态。</p>' },
+      '王者':{ sub:'鞠躬尽瘁', quote:'"先帝创业未半……算了,我带你练。"', desc:'<p>你已经<strong>不需要训练计划</strong>——你自己就是训练计划。你的身体、生活、目标、方法,融成了一件事。</p><p>诸葛亮最动人的不是"神机妙算",是<strong>"鞠躬尽瘁,死而后已"</strong>——不是因为他有多强,是因为他把自己学到的一切,都传下去了。王者诸葛亮的最高境界,是让别人也能出山。</p>' },
+    }
+  },
+  { key:'peiqin', name:'打野·裴擒虎', subname:'多项游击', emoji:'🐯', type:'hero',
+    ideal:[70,60,70,60,60],
+    tags:{ variety:10, social:3, burst:3 },
+    quote:'"你从不好好练一个项目，但你什么都会一点。"',
+    description:'<p>你是户外党、飞盘爱好者、攀岩入门选手、偶尔打拳、周末 HIIT。裴擒虎能人能虎——你也是,<strong>上天入地全能,但都不精</strong>。</p><p>你讨厌一成不变的训练,你要的是多巴胺,不是训练效果。</p>',
+    status:['运动愉悦感最高,享受运动本身','上天入地全能,但都不精','讨厌一成不变的训练','微信运动里项目多到数不清'],
+    build:['在多样性里<strong>挑一个"主线项目"坚持 3 个月</strong>','其他继续当多巴胺来源','你不需要变专一,但需要一个可以衡量进步的锚','建立一个"进步可见"的项目,会让你更享受'],
+    tiers:{
+      '青铜':{ sub:'探路新手', quote:'"你下载了 5 个运动 App,都只用过一次。"', desc:'<p>你刚刚发现"原来运动可以这么多样"。飞盘、攀岩、桨板、搏击、跑步、瑜伽——<strong>每一个你都想试</strong>,但每一个都没深入。</p><p>你是裴擒虎的幼年期:好奇心爆棚,定力为零。这不是坏事,这是你和其他人不一样的起点。</p>' },
+      '白银':{ sub:'多项入门', quote:'"你有 3 个固定的运动爱好,每个都停留在入门水平。"', desc:'<p>你稳定下来了——不再什么都试,而是选了 3-4 个自己真正喜欢的项目轮流玩。你的社交圈因此变大,你认识了飞盘群、攀岩馆、拳击班的朋友。</p><p><strong>运动成了你的社交货币</strong>。</p>' },
+      '黄金':{ sub:'跨界玩家', quote:'"你在每个项目里都能打,但没一个是 top。"', desc:'<p>你在多样性里找到了节奏。你的攀岩不如专业攀岩手,但比飞盘玩家强;你的飞盘不如国家队,但比攀岩党强。</p><p>你是<strong>"广度型选手"</strong>,朋友叫你"杂食动物"。裴擒虎能人能虎,你能跑能跳能打能爬。</p>' },
+      '钻石':{ sub:'跨界高手', quote:'"你开始在某些项目里真正有排名了。"', desc:'<p>你在多样性里淬出了真正的能力。你可能专精一个项目(比如越野跑或攀岩),但保留 2-3 个副项。</p><p>你发现——<strong>多样性不是让你变弱,而是让你的主项更强</strong>,因为你有了别人没有的身体素质储备。</p>' },
+      '王者':{ sub:'万物皆可', quote:'"你走进任何一个运动场地,都能马上找到节奏。"', desc:'<p>你是真正的<strong>运动通才</strong>。任何项目你都能在 1-2 次尝试后找到感觉。你的身体像一个通用引擎——<strong>能跑能跳能举能扑能游</strong>。</p><p>裴擒虎的最高境界是"<strong>万物皆可切换</strong>"——你就是这种人。运动对你来说不是"练什么",是<strong>"身体本来就会的事"</strong>。</p>' },
+    }
+  },
+
+  // ===== 隐藏档 2 =====
+  { key:'hua', name:'苦行僧·花木兰', subname:'过载警告', emoji:'⚔️', type:'hidden',
+    ideal:[90,90,90,90,30],
+    tags:{ overtrain:20, compete:5 },
+    trigger:'五维前四项均 ≥ 80,恢复力 ≤ 40',
+    quote:'"你需要的不是训练计划，是心理医生。"',
+    description:'<p>你是那种<strong>把运动当宗教</strong>的人。花木兰一人两套装备——轻剑爆发,重剑抗压。你也是——白天一身班味,晚上一身肌肉味。</p><p>你一周训练 6 天,受伤了还在练,休息日会焦虑。你的数据很好看,你的体脂很低,但你的身体在<strong>慢性过载</strong>。</p>',
+    status:['意志力阈值是普通人 3 倍','数据漂亮但慢性过载','休息日会焦虑','恢复是你唯一的盲区'],
+    build:['<strong>加一天强制休息日</strong>,什么都不做','听身体的,不听意志力的','竞技不是修行,恢复也是训练的一部分','真正的精英运动员一周休 1-2 天,不是偷懒,是科学']
+  },
+  { key:'guan', name:'赛博斯巴达·关羽', subname:'觉醒态', emoji:'🐉', type:'hidden',
+    ideal:[95,95,95,95,90],
+    tags:{ compete:10, balanced:5 },
+    trigger:'五维全部 ≥ 85',
+    quote:'"温酒斩华雄是你的爆发力，过五关斩六将是你的有氧基础。恭喜，你不是人。"',
+    description:'<p>你是天选之子,是朋友圈里被所有人问<strong>"你是不是人"</strong>的那一个。心肺好、力量好、有氧好、爆发好、恢复好——<strong>你不是在训练,你是在演化</strong>。</p><p>关羽骑着赤兔拿着青龙偃月刀,你骑着公路车背着战术背包——<strong>装备都是加成,你本身就是 buff</strong>。</p>',
+    status:['五维全面顶级,生物学层面的差异','别人训练需要意志力,你不训练才需要','看躺平档像看路人甲','测这个测试是出于好奇,不是出于需要'],
+    build:['找<strong>更狠的目标</strong>——赛级铁三、越野 50 km、Hyrox、UTMB','你的上限在更远的地方','别停在"还不错"就满足','考虑把经验系统化地传给新手']
+  },
+];
+
+/* ============================================================
+   段位系统
+   ============================================================ */
+const TIERS = ['青铜','白银','黄金','钻石','王者'];
+const TIER_EMOJI = { '青铜':'🥉', '白银':'⚪', '黄金':'🥇', '钻石':'💎', '王者':'👑' };
+
+// 英雄档/隐藏档:正向阈值
+const HERO_TIER_THRESHOLDS = [
+  { max:40, name:'青铜' },
+  { max:55, name:'白银' },
+  { max:70, name:'黄金' },
+  { max:85, name:'钻石' },
+  { max:101, name:'王者' },
+];
+// 躺平档:反向阈值(越低段位越高)
+const LAZY_TIER_THRESHOLDS = [
+  { max:10, name:'王者' },
+  { max:20, name:'钻石' },
+  { max:30, name:'黄金' },
+  { max:40, name:'白银' },
+  { max:101, name:'青铜' },
+];
+
+// 通用段位修饰模板(给没有专属段位文案的英雄用)
+const GENERIC_HERO_TIER_TEMPLATE = {
+  '青铜': { prefix:'你刚摸到这个英雄的一技能', suffix:'每个王者都是从青铜开始的' },
+  '白银': { prefix:'你已经有这个英雄的样子了,但还没出装', suffix:'再坚持 8 周,你就是黄金' },
+  '黄金': { prefix:'你是这个英雄的合格使用者,能稳定 carry 路人局', suffix:'到这一档,方法比努力更重要' },
+  '钻石': { prefix:'你已经进入这个英雄的舒适区,操作和意识都在线', suffix:'再往上一步,就是质变' },
+  '王者': { prefix:'你就是这个英雄的本体', suffix:'下一步:寻找更强的对手' },
+};
+const GENERIC_LAZY_TIER_TEMPLATE = {
+  '青铜': { prefix:'你还有救,勉强算半个正常人', suffix:'再坚持一下,可以升到英雄档' },
+  '白银': { prefix:'你是标准的躺平选手', suffix:'你离"完全不动"还差一小步' },
+  '黄金': { prefix:'你的躺平已经形成肌肉记忆', suffix:'家人已经放弃叫你出门了' },
+  '钻石': { prefix:'你是小区里的传说', suffix:'外卖小哥都认识你' },
+  '王者': { prefix:'你躺平的样子,连苏格拉底都要学习', suffix:'请保持,你是这个时代的诗人' },
+};
+
+/* ============================================================
+   答题逻辑
+   ============================================================ */
+const state = {
+  current: 0,
+  answers: [],   // 每题对应选项 index
+};
+
+function startQuiz() {
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  state.current = 0;
+  state.answers = [];
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[state.current];
+  const total = QUESTIONS.length;
+  document.getElementById('progressFill').style.width = ((state.current) / total * 100) + '%';
+  document.getElementById('progressText').innerText = (state.current + 1) + ' / ' + total;
+  document.getElementById('progressSection').innerText = q.section;
+
+  const optionsHtml = q.options.map((opt, i) =>
+    '<button class="option" onclick="selectOption(' + i + ')"><strong>' + String.fromCharCode(65+i) + '.</strong> ' + opt.t + '</button>'
+  ).join('');
+
+  document.getElementById('questionArea').innerHTML =
+    '<div class="question-card">' +
+      '<div class="q-tag">' + q.section + '</div>' +
+      '<div class="q-text">' + q.text + '</div>' +
+      '<div class="options">' + optionsHtml + '</div>' +
+    '</div>';
+  window.scrollTo(0, 0);
+}
+
+function selectOption(idx) {
+  state.answers[state.current] = idx;
+  state.current++;
+  if (state.current >= QUESTIONS.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+/* ============================================================
+   计分 + 匹配
+   ============================================================ */
+function calculateScores() {
+  // 五维分数
+  const dims = { vo2max:[], aerobic:[], power:[], muscle:[], recovery:[] };
+  // 风格标签累计
+  const tags = {};
+
+  QUESTIONS.forEach((q, i) => {
+    const ansIdx = state.answers[i];
+    const opt = q.options[ansIdx];
+    if (q.dim) {
+      dims[q.dim].push(opt.v);
+    }
+    if (q.style && opt.tags) {
+      opt.tags.forEach(tag => { tags[tag] = (tags[tag] || 0) + 1; });
+    }
+  });
+
+  const fiveDim = {
+    vo2max: Math.round(dims.vo2max.reduce((a,b)=>a+b,0) / dims.vo2max.length),
+    aerobic: Math.round(dims.aerobic.reduce((a,b)=>a+b,0) / dims.aerobic.length),
+    power: Math.round(dims.power.reduce((a,b)=>a+b,0) / dims.power.length),
+    muscle: Math.round(dims.muscle.reduce((a,b)=>a+b,0) / dims.muscle.length),
+    recovery: Math.round(dims.recovery.reduce((a,b)=>a+b,0) / dims.recovery.length),
+  };
+  const avg = Math.round((fiveDim.vo2max + fiveDim.aerobic + fiveDim.power + fiveDim.muscle + fiveDim.recovery) / 5);
+
+  return { fiveDim, avg, tags };
+}
+
+function matchArchetype(fiveDim, tags, avg) {
+  const userRadar = [fiveDim.vo2max, fiveDim.aerobic, fiveDim.power, fiveDim.muscle, fiveDim.recovery];
+
+  let best = null;
+  let bestScore = -Infinity;
+
+  ARCHETYPES.forEach(arc => {
+    // 1. 雷达图欧氏距离相似度(转成 0-100,越近越高)
+    let dist = 0;
+    for (let i=0; i<5; i++) {
+      dist += Math.pow(userRadar[i] - arc.ideal[i], 2);
+    }
+    dist = Math.sqrt(dist / 5);
+    const radarMatch = Math.max(0, 100 - dist);
+
+    // 2. 风格标签匹配分
+    let tagMatch = 0;
+    for (const tag in arc.tags) {
+      if (tags[tag]) {
+        tagMatch += tags[tag] * arc.tags[tag];
+      }
+    }
+
+    // 3. 隐藏档触发条件
+    let hiddenBonus = 0;
+    if (arc.key === 'guan') {
+      if (userRadar.every(v => v >= 85)) hiddenBonus = 500;
+    }
+    if (arc.key === 'hua') {
+      const first4 = userRadar.slice(0,4).every(v => v >= 80);
+      const lowRec = userRadar[4] <= 40;
+      if (first4 && lowRec) hiddenBonus = 400;
+    }
+
+    // 4. 躺平档限制:avg 必须在 50 以下才能匹配
+    if (arc.type === 'lazy' && avg > 50) {
+      return; // skip
+    }
+    // 英雄档/隐藏档不设下限,让人人都能匹配(只是段位低)
+
+    const total = radarMatch * 1.0 + tagMatch * 2.5 + hiddenBonus;
+
+    if (total > bestScore) {
+      bestScore = total;
+      best = arc;
+    }
+  });
+
+  return best;
+}
+
+function calculateTier(archetype, avg) {
+  const table = archetype.type === 'lazy' ? LAZY_TIER_THRESHOLDS : HERO_TIER_THRESHOLDS;
+  for (const t of table) {
+    if (avg < t.max) return t.name;
+  }
+  return table[table.length-1].name;
+}
+
+function getNextTier(archetype, currentTier, avg) {
+  const idx = TIERS.indexOf(currentTier);
+  if (archetype.type === 'lazy') {
+    // 躺平档的"下一段位"是往上(变得更正常)
+    if (idx === 0) return null; // 青铜躺平的下一档已经是英雄档了
+    const nextName = TIERS[idx - 1];
+    const threshold = LAZY_TIER_THRESHOLDS.find(t => t.name === nextName);
+    return { name: nextName, gap: Math.max(1, Math.round(avg - (threshold.max - 1))) , direction:'下降' };
+  } else {
+    if (idx === TIERS.length - 1) return null;
+    const nextName = TIERS[idx + 1];
+    const threshold = HERO_TIER_THRESHOLDS.find(t => t.name === currentTier);
+    // threshold.max 是当前档的上限,也是下一档的起点
+    return { name: nextName, gap: Math.max(1, Math.round(threshold.max - avg)), direction:'上升' };
+  }
+}
+
+/* ============================================================
+   渲染结果
+   ============================================================ */
+function showResult() {
+  const { fiveDim, avg, tags } = calculateScores();
+  const arc = matchArchetype(fiveDim, tags, avg);
+  const tier = calculateTier(arc, avg);
+  const tierData = arc.tiers && arc.tiers[tier];
+  const next = getNextTier(arc, tier, avg);
+
+  document.getElementById('quiz').classList.add('hidden');
+  document.getElementById('result').classList.remove('hidden');
+
+  // ===== 顶部卡 =====
+  document.getElementById('tierBadge').innerText = TIER_EMOJI[tier] + ' ' + tier + ' · ' + arc.name;
+  document.getElementById('heroEmoji').innerText = arc.emoji;
+  document.getElementById('heroName').innerText = arc.name;
+  // 副标题优先用段位专属
+  document.getElementById('heroSubname').innerText = tierData ? tierData.sub : arc.subname;
+  // 台词优先用段位专属
+  document.getElementById('heroQuote').innerText = tierData ? tierData.quote : arc.quote;
+
+  // ===== 雷达图 =====
+  drawRadar(fiveDim);
+
+  // ===== 五维列表 =====
+  const dimLabels = { vo2max:'VO2max 天花板', aerobic:'有氧基础', power:'爆发力', muscle:'肌肉耐力', recovery:'恢复力' };
+  document.getElementById('dimList').innerHTML = Object.keys(dimLabels).map(k =>
+    '<div class="dim-item"><span>' + dimLabels[k] + '</span><span class="dim-val">' + fiveDim[k] + '</span></div>'
+  ).join('');
+
+  // ===== 角色描述 =====
+  // 段位专属描述优先,否则用基础描述
+  let descHtml = '';
+  if (tierData && tierData.desc) {
+    descHtml = tierData.desc;
+  } else {
+    // 使用通用段位修饰模板拼接
+    const tpl = arc.type === 'lazy' ? GENERIC_LAZY_TIER_TEMPLATE[tier] : GENERIC_HERO_TIER_TEMPLATE[tier];
+    descHtml = '<p><em>' + tpl.prefix + '。</em></p>' + arc.description + '<p><em>' + tpl.suffix + '。</em></p>';
+  }
+  document.getElementById('heroDescription').innerHTML = descHtml;
+
+  // ===== 状态列表 =====
+  document.getElementById('heroStatus').innerHTML = arc.status.map(s => '<li>' + s + '</li>').join('');
+
+  // ===== Build 建议 =====
+  document.getElementById('heroBuild').innerHTML = arc.build.map(b => '<li>' + b + '</li>').join('');
+
+  // ===== 下一段位 =====
+  if (next) {
+    document.getElementById('nextTierName').innerText = next.name + arc.name.split('·').pop();
+    const dirText = arc.type === 'lazy' ? '向上(更活跃)' : '向上';
+    document.getElementById('nextTierGap').innerText = '距离 ' + next.name + ' 还差约 ' + next.gap + ' 分 · ' + dirText;
+  } else {
+    document.getElementById('nextTierName').innerText = '已达顶端';
+    document.getElementById('nextTierGap').innerText = '你已经在这个英雄的最高段位 · 寻找新目标';
+  }
+
+  window.scrollTo(0, 0);
+}
+
+/* ============================================================
+   Canvas 雷达图
+   ============================================================ */
+function drawRadar(fiveDim) {
+  const canvas = document.getElementById('radarCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+  const R = 110;
+  const labels = ['VO2max', '有氧', '爆发', '肌耐', '恢复'];
+  const values = [fiveDim.vo2max, fiveDim.aerobic, fiveDim.power, fiveDim.muscle, fiveDim.recovery];
+
+  ctx.clearRect(0,0,W,H);
+  ctx.save();
+  ctx.translate(cx, cy);
+
+  const angleOffset = -Math.PI/2;
+  const sides = 5;
+
+  // 背景网格
+  for (let layer=1; layer<=4; layer++) {
+    const r = R * layer / 4;
+    ctx.beginPath();
+    for (let i=0; i<sides; i++) {
+      const ang = angleOffset + i * 2*Math.PI/sides;
+      const x = r * Math.cos(ang), y = r * Math.sin(ang);
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = layer===4 ? '#5A4A2E' : '#3A3A48';
+    ctx.lineWidth = layer===4 ? 1.5 : 1;
+    ctx.stroke();
+  }
+
+  // 轴线
+  for (let i=0; i<sides; i++) {
+    const ang = angleOffset + i * 2*Math.PI/sides;
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.lineTo(R*Math.cos(ang), R*Math.sin(ang));
+    ctx.strokeStyle = '#3A3A48';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // 数据多边形
+  ctx.beginPath();
+  for (let i=0; i<sides; i++) {
+    const ang = angleOffset + i * 2*Math.PI/sides;
+    const v = values[i] / 100;
+    const x = R * v * Math.cos(ang), y = R * v * Math.sin(ang);
+    if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(229, 176, 75, 0.25)';
+  ctx.fill();
+  ctx.strokeStyle = '#E5B04B';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // 数据点
+  for (let i=0; i<sides; i++) {
+    const ang = angleOffset + i * 2*Math.PI/sides;
+    const v = values[i] / 100;
+    const x = R * v * Math.cos(ang), y = R * v * Math.sin(ang);
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, 2*Math.PI);
+    ctx.fillStyle = '#F5D380';
+    ctx.fill();
+    ctx.strokeStyle = '#C0392B';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  // 标签
+  ctx.font = 'bold 13px -apple-system, PingFang SC, sans-serif';
+  ctx.fillStyle = '#F5F5F0';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (let i=0; i<sides; i++) {
+    const ang = angleOffset + i * 2*Math.PI/sides;
+    const lx = (R + 22) * Math.cos(ang);
+    const ly = (R + 22) * Math.sin(ang);
+    ctx.fillText(labels[i], lx, ly);
+    // 分数
+    ctx.font = '11px monospace';
+    ctx.fillStyle = '#E5B04B';
+    ctx.fillText(values[i], lx, ly + 14);
+    ctx.font = 'bold 13px -apple-system, PingFang SC, sans-serif';
+    ctx.fillStyle = '#F5F5F0';
+  }
+
+  ctx.restore();
+}
+
+function shareResult() {
+  alert('截图保存,分享到朋友圈吧 📸\n\n(后续版本会支持生成长图分享卡)');
+}
+</script>
+</body>
+</html>
